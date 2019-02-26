@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from rest_framework import viewsets
+from serializers import AppealSerializer
 
 from models import AppealReceiptsData, load_data_from_csv_file
 
 from django.shortcuts import render
 
 # Create your views here.
+
+
+class AppealsViewSet(viewsets.ModelViewSet):
+    queryset = AppealReceiptsData.objects.all()
+    serializer_class = AppealSerializer
 
 
 def index(request):
