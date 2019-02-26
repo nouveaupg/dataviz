@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+    <script src="{% static 'highcharts/highcharts.js' %}"></script>
+    <meta charset="UTF-8">
+    <title>Medicare Appeals by State</title>
+    <link rel="stylesheet" href="{% static "css/stylesheet.css" %}" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        $(function () {
+           $("#state_select").change(function () {
+               $("#active_control").val("state");
+               $("#filter_form").submit();
+           });
+           $("#year_select").change(function () {
+              $("#active_control").val("year");
+              $("#filter_form").submit();
+           });
+        });
+    </script>
+</head>
+<body>
+
+<div id="main">
+<div id="menu">
+        <form id="filter_form" action="/" method="get">
+            <input type="hidden" id="active_control" name="active_control" value="" />
+            <table id="menu">
+                <tr>
+                    <td colspan="2"><h3>Medicare Appeals Data</h3></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>By State</label>
+                    </td>
+                    <td align="right">
+                        <select name="state_menu" id="state_select">
+                            {% for each_state in state_names %}
+                                {% if each_state == selected_state %}
+                                    <option selected="selected" value="{{ each_state }}">{{ each_state }}</option>
+                                {% else %}
+                                <option value="{{ each_state }}">{{ each_state }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>By Year</label>
+                    </td>
+                    <td align="right">
+                        <select name="year_menu" id="year_select">
+                            {% for each_year in years %}
+                                {% if each_year == selected_year %}
+                                    <option value="{{ each_year }}" selected="selected">{{ each_year }}</option>
+                                {% else %}
+                                    <option value="{{ each_year }}">{{ each_year }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="content">
+
+        <div id="charting"></div>
+        {% if active_control == "state" %}
+            <script language="JavaScript">
+        Highcharts.chart('charting', {
+            chart: {
+                backgroundColor: '#3C3F41',
+
+            },
+            title: {
+                text: "Medicare Appeals for {{ selected_state }} by Year",
+                style: {color: "#ffffff"}
+            },
+
+            yAxis: {
+                title: {
+                    text: "Total Appeals"
+                }
+            },
+            xAxis: {
+                title: {
+                    text: "Year"
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                itemStyle: {
+                    color: "#ffffff"
+                },
+                itemHiddenStyle: {
+                    color: "#4c4c4c"
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    pointStart: {{ first }}
+                }
+            },
+
+            series: [
+                {
+                    name: "{{ selected_state }}",
+                    data: {{ metrics }},
+                    color: '#A6216B'
+                }]
+
+
+});</script> {% endif %}
+    {% if active_control == "year" %}
+        <script language="JavaScript">
+        Highcharts.chart('charting', {
+            chart: {
+                backgroundColor: '#3C3F41',
+                type: "column",
+            },
+            title: {
+                text: "Medicare Appeals By State for {{ selected_year }}",
+                style: {color: "#ffffff"}
+            },
+
+            yAxis: {
+                title: {
+                    text: "Total Appeals"
+                }
+            },
+            xAxis: {
+                title: {
+                    text: "State"
+                },
+                categories: [
+                    {% for each in sorted_states %}
+                        '{{ each }}',
+                    {% endfor %}
+                ],
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                itemStyle: {
+                    color: "#ffffff"
+                },
+                itemHiddenStyle: {
+                    color: "#4c4c4c"
+                }
+            },
+
+             plotOptions: {
+                 column: {
+                     pointPadding: 0.2,
+                     borderWidth: 0
+                }
+            },
+
+            series: [
+                {
+                    name: "{{ selected_year }}",
+                    data: {{ metrics }},
+                    color: '#A6216B'
+                }]
+
+
+});</script>
+    {% endif %}
+    </div>
+
+</div>
+</body>

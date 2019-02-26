@@ -1,0 +1,49 @@
+#content {
+}
+
+h3 {
+    margin-left:5px;
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+label {
+    margin-left:5px;
+}
+
+select {
+    margin-right:5px;
+}
+
+body {
+    background-color: rgb(40,40,40);
+    color: silver;
+}
+
+label {
+    font-size: smaller;
+    vertical-align: center;
+}
+
+#header {
+    text-align: right;
+}
+
+#menu {
+    background-color: rgb(60,63,65);
+    width:240px;
+    border: 1px solid silver;
+    padding: 1px;
+}
+
+#charting {
+    width: 1024px;
+    height: 400px;
+    margin-left: auto;
+}
+
+#main {
+    width:1024px;
+    margin-left:auto;
+    margin-right:auto;
+}
